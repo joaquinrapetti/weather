@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
+import Loading from "./Loading";
 import WeatherForm from "./WeatherForm";
+import WeatherMainInfo from "./WeatherMainInfo";
+
+import styles from "./WeatherApp.module.css";
 
 const WeatherApp = () => {
   // Estado a recibir objeto con info API weather
@@ -16,9 +20,11 @@ const WeatherApp = () => {
         `${process.env.REACT_APP_URL}&key=${process.env.REACT_APP_KEY}&q=${city}`
       );
 
+      setTimeout(() => {
+        setWeather(json);
+      }, 2000);
       const json = await request.json();
-      console.log(json);
-      setWeather(json);
+      //   console.log(json);
     } catch (error) {}
   };
 
@@ -28,9 +34,9 @@ const WeatherApp = () => {
   };
 
   return (
-    <div>
+    <div className={styles.weatherContainer}>
       <WeatherForm onChangeCity={handleChangeCity} />
-      <div>{weather?.current.temp_c}</div>
+      {weather ? <WeatherMainInfo weather={weather} /> : <Loading />}
     </div>
   );
 };
